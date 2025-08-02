@@ -3581,7 +3581,7 @@ CONFIG_UUID=y
 CONFIG_EMMC_IPANIC=y
 CONFIG_SENSORS_APDS990X_FORK=y
 # CONFIG_KCT_DAEMON is not set
-CONFIG_BCM_BT_LPM=m
+CONFIG_BCM_BT_LPM=y
 
 #
 # Fork of Texas Instruments shared transport line discipline
