@@ -504,11 +504,14 @@
 		#ifdef HX_TP_PROC_DEBUG_LEVEL
 		#define	HIMAX_PROC_DEBUG_FILE	"himax_debug"
 		static struct proc_dir_entry *himax_proc_debug_file;
+		// Debug level bit meanings:
+		// Bit 0 (0x1): Raw data packet debugging
+		// Bit 1 (0x2): Touch UP/DOWN event messages
 		static uint8_t 	debug_log_level= 0;
-		static bool	fw_update_complete = false;
-		static bool irq_enable = false;
-		static int handshaking_result = 0;
-		static unsigned char debug_level_cmd = 0;
+	static bool	fw_update_complete = false;
+	static bool irq_enable = false;
+	static int handshaking_result = 0;
+	static unsigned char debug_level_cmd = 0;
 		static unsigned char upgrade_fw[32*1024];
 
 		static uint8_t getDebugLevel(void);
@@ -8773,7 +8776,10 @@
 
 						if (Touch_flag == 0)
 						{
-							printk("[HIMAX MSG]%s TOUCH DOWN!.\n",__func__);
+							#ifdef HX_TP_PROC_DEBUG_LEVEL
+							if (getDebugLevel() & 0x2)
+								printk("[HIMAX MSG]%s TOUCH DOWN!.\n",__func__);
+							#endif
 							Touch_flag = 1;
 						}
 
@@ -8894,7 +8900,10 @@
 
 				if (Touch_flag == 1)
 				{
-					printk("[HIMAX MSG]%s TOUCH UP!.\n",__func__);
+					#ifdef HX_TP_PROC_DEBUG_LEVEL
+					if (getDebugLevel() & 0x2)
+						printk("[HIMAX MSG]%s TOUCH UP!.\n",__func__);
+					#endif
 					Touch_flag = 0;
 				}
 
@@ -9700,3 +9709,4 @@
 		MODULE_DESCRIPTION("Himax Touchscreen Driver");
 		MODULE_LICENSE("GPL");
 	//----[ i2c ]-----------------------------------------------------------------------------------------------end
+
