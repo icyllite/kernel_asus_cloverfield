@@ -5,9 +5,6 @@
 #include <linux/wakelock.h>
 #include <linux/switch.h>
 
-/*
- * compiler option
- */
 #define ASUSDEC_DEBUG			0
 #define FACTORY_MODE                    0
 #define TF600T_TOUCHPAD_MODE	0	// 0: relative mode, 1: absolute mode
@@ -443,3 +440,4 @@ struct elan_i2c_data {
 	//Shouchung end
 };
 #endif
+

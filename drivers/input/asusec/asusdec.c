@@ -147,7 +147,7 @@ void ec_irq_disable(void)
 {
 	unsigned long irqflags;
 	spin_lock_irqsave(&ec_chip->irq_lock, irqflags);
-	printk("ec_irq_disable flag = %d\n", ec_chip->apwake_disabled);
+	ASUSDEC_INFO("ec_irq_disable flag = %d\n", ec_chip->apwake_disabled);
 	if (!ec_chip->apwake_disabled)
 	{
 		ec_chip->apwake_disabled = 1;
@@ -162,7 +162,7 @@ void ec_irq_enable(void)
 {
 	unsigned long irqflags;
 	spin_lock_irqsave(&ec_chip->irq_lock, irqflags);
-	printk("ec_irq_enable flag = %d\n", ec_chip->apwake_disabled);
+	ASUSDEC_INFO("ec_irq_enable flag = %d\n", ec_chip->apwake_disabled);
 	if (ec_chip->apwake_disabled) 
 	{
 		enable_irq(gpio_to_irq(asusdec_apwake_gpio));
@@ -849,10 +849,10 @@ static irqreturn_t asusdec_interrupt_handler(int irq, void *dev_id){
 		printk("==Receive the dock in irq==\n");
 	}
 	else if (irq == asusdec_apwake_gpio_irq){
-		ASUSDEC_NOTICE("asusdec_apwake_gpio_irq before call irq disable\n");
+		ASUSDEC_INFO("asusdec_apwake_gpio_irq before call irq disable\n");
 		ec_irq_disable();
-		ASUSDEC_NOTICE("asusdec_apwake_gpio_irq after call irq disable\n");
-		ASUSDEC_NOTICE("print value gpio=%d irq=%d ec_chip->op_mode=%d\n",gpio ,irq ,ec_chip->op_mode);
+		ASUSDEC_INFO("asusdec_apwake_gpio_irq after call irq disable\n");
+		ASUSDEC_INFO("print value gpio=%d irq=%d ec_chip->op_mode=%d\n",gpio ,irq ,ec_chip->op_mode);
 		if (ec_chip->op_mode == 1){
 			ASUSDEC_NOTICE("into asusdec_fw_update_work");
 			schedule_work(&ec_chip->asusdec_fw_update_work);
@@ -1198,12 +1198,12 @@ static void asusdec_kb_report_work_function(struct work_struct *dat)
                 return;
         }
 
-        ASUSDEC_NOTICE("key code[1] : 0x%x\n",ec_chip->i2c_kb_data[0]);
-        ASUSDEC_NOTICE("key code[2] : 0x%x\n",ec_chip->i2c_kb_data[1]);
-        ASUSDEC_NOTICE("key code[3] : 0x%x\n",ec_chip->i2c_kb_data[2]);
-        ASUSDEC_NOTICE("key code[4] : 0x%x\n",ec_chip->i2c_kb_data[3]);
-        ASUSDEC_NOTICE("key code[5] : 0x%x\n",ec_chip->i2c_kb_data[4]);
-        ASUSDEC_NOTICE("key code[6] : 0x%x\n",ec_chip->i2c_kb_data[5]);
+        ASUSDEC_INFO("key code[1] : 0x%x\n",ec_chip->i2c_kb_data[0]);
+        ASUSDEC_INFO("key code[2] : 0x%x\n",ec_chip->i2c_kb_data[1]);
+        ASUSDEC_INFO("key code[3] : 0x%x\n",ec_chip->i2c_kb_data[2]);
+        ASUSDEC_INFO("key code[4] : 0x%x\n",ec_chip->i2c_kb_data[3]);
+        ASUSDEC_INFO("key code[5] : 0x%x\n",ec_chip->i2c_kb_data[4]);
+        ASUSDEC_INFO("key code[6] : 0x%x\n",ec_chip->i2c_kb_data[5]);
 	
         ec_chip->keypad_data.extend = 0;
 		/*
@@ -1216,7 +1216,7 @@ static void asusdec_kb_report_work_function(struct work_struct *dat)
 	if( (ec_chip->i2c_kb_data[0] == 0x5 && ec_chip->i2c_kb_data[2] == 0x13) ||
 	    (ec_chip->i2c_kb_data[0] == 0x4 && ec_chip->i2c_kb_data[2] == 0x14) )
 	{
-		ASUSDEC_NOTICE("consumer key\n");
+		ASUSDEC_INFO("consumer key\n");
 		if(ec_chip->i2c_kb_data[3])
 			input_report_key(ec_chip->indev, asusdec_kp_consumer_key_mapping(ec_chip->i2c_kb_data[3]), 1);
 		else
@@ -1886,7 +1886,7 @@ static void asusdec_work_function(struct work_struct *dat)
 	int irq = gpio_to_irq(gpio);
 	int ret_val = 0;
 	ret_val = asusdec_intr_i2c_read_data(&intr_client);
-	ASUSDEC_NOTICE("=======0x%x 0x%x 0x%x 0x%x=======ap_wake =%d\n", ec_chip->intr_i2c_data[0],
+	ASUSDEC_INFO("=======0x%x 0x%x 0x%x 0x%x=======ap_wake =%d\n", ec_chip->intr_i2c_data[0],
                  ec_chip->intr_i2c_data[1], ec_chip->intr_i2c_data[2], ec_chip->intr_i2c_data[3], gpio_get_value(asusdec_apwake_gpio));
 	if (ret_val < 0){
 		printk("asusdec_work_function ret_val < 0!!\n");
@@ -2614,3 +2614,4 @@ static void __exit asusdec_exit(void)
 
 module_init(asusdec_init);
 module_exit(asusdec_exit);
+
