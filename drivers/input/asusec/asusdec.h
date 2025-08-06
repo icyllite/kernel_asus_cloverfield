@@ -8,6 +8,15 @@
 /*
  * compiler option
  */
+/*
+ * ASUSDEC_DEBUG: Controls verbose debugging output
+ * 0 = Minimal logging (recommended for normal use to reduce log clutter)
+ * 1 = Verbose logging (useful for debugging hardware issues)
+ * 
+ * Note: When set to 0, ASUSDEC_INFO() calls become no-ops, significantly
+ * reducing the amount of logging during normal operation, especially
+ * during frequent hardware interactions like touchpad/keyboard events.
+ */
 #define ASUSDEC_DEBUG			0
 #define FACTORY_MODE                    0
 #define TF600T_TOUCHPAD_MODE	0	// 0: relative mode, 1: absolute mode
